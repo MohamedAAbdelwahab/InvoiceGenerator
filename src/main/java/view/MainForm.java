@@ -76,10 +76,6 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel4.setText("Invoice total");
 
-        jLabel5.setText("jLabel5");
-
-        jLabel6.setText("jLabel6");
-
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -240,6 +236,10 @@ public class MainForm extends javax.swing.JFrame {
 ArrayList<InvoiceHeader> headers=new ArrayList();    
 ActionHandler handler=new ActionHandler(this);
 tableSelectionHandler LinesHandler=new tableSelectionHandler(this);
+
+    public ActionHandler getHandler() {
+        return handler;
+    }
 
     public ArrayList<InvoiceHeader> getHeaders() {
         return headers;

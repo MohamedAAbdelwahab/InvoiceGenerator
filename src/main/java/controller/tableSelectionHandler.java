@@ -25,9 +25,14 @@ public class tableSelectionHandler implements ListSelectionListener{
     @Override
     public void valueChanged(ListSelectionEvent e) {
         
-        if(form.getHeaders().size()==0)
+        if(form.getHeaders().isEmpty())
         {
+            
             return;
+        }
+        if(form.getjTable1().getSelectedRow()== -1)
+        {
+             return;
         }
        int selectedIndex=form.getjTable1().getSelectedRow();
        InvoiceHeader header=form.getHeaders().get(selectedIndex);

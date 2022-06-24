@@ -40,6 +40,7 @@ public class HeaderTableHandler extends AbstractTableModel {
         }
            return ""; 
     }
+    
     @Override
     public String getColumnName(int column) {
          switch (column) {
@@ -50,4 +51,5 @@ public class HeaderTableHandler extends AbstractTableModel {
         }
          return "";
     }
+    
 }

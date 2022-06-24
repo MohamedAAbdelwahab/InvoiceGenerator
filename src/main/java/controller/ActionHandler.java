@@ -15,6 +15,7 @@ import model.FileOperations;
 import model.HeaderTableHandler;
 import model.InvoiceHeader;
 import model.InvoiceLine;
+import view.AddInvoiceHeader;
 import view.MainForm;
 
 /**
@@ -24,6 +25,8 @@ import view.MainForm;
 public class ActionHandler implements ActionListener {
     MainForm form;
     FileOperations fileOP=new FileOperations();
+    AddInvoiceHeader AddingInvoicehandler;
+    HeaderTableHandler Tablehandler;
     public ActionHandler(MainForm form) {
         this.form=form;
     }
@@ -58,6 +61,14 @@ public class ActionHandler implements ActionListener {
         {
             Cancel();
         }
+        else if(e.getActionCommand().equals("Confirm"))
+        {
+            InvoiceHeaderDialogConfirm();
+        }
+        else if(e.getActionCommand().equals("newInvoiceCancel"))
+        {
+            InvoiceHeaderDialogCancel();
+        }
         else 
         {
             System.out.println("action not specified");
@@ -90,8 +101,8 @@ public class ActionHandler implements ActionListener {
                   }
               }
          }
-         HeaderTableHandler handler=new HeaderTableHandler(headers);
-         form.getjTable1().setModel(handler);
+         Tablehandler=new HeaderTableHandler(headers);
+         form.getjTable1().setModel(Tablehandler);
          form.setHeaders(headers);
     }
 
@@ -99,6 +110,8 @@ public class ActionHandler implements ActionListener {
     }
 
     private void CreateInvoice() {
+        AddingInvoicehandler=new AddInvoiceHeader(form);
+        AddingInvoicehandler.setVisible(true);
     }
 
     private void DeleteInvoice() {
@@ -108,6 +121,30 @@ public class ActionHandler implements ActionListener {
     }
 
     private void Cancel() {
+    }
+
+    private void InvoiceHeaderDialogConfirm() {
+       String customerName=AddingInvoicehandler.getCustNameField().getText();
+       String invoicDate=AddingInvoicehandler.getInvDateField().getText();
+       InvoiceHeader header=new InvoiceHeader();
+       header.setCustomerName(customerName);
+       header.setInvoiceDate(invoicDate);
+       int index=0;
+       for(InvoiceHeader invoice:form.getHeaders())
+       {
+           if(invoice.getInvoiceNum()>index)
+               index=invoice.getInvoiceNum();
+       }
+       header.setInvoiceNum(index+1);
+       form.getHeaders().add(header);
+       Tablehandler.fireTableDataChanged();
+       AddingInvoicehandler.setVisible(false);
+       AddingInvoicehandler=null;
+    }
+
+    private void InvoiceHeaderDialogCancel() {
+        
+        AddingInvoicehandler.setVisible(false);
     }
     
 }
