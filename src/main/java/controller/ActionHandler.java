@@ -6,15 +6,11 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import model.FileOperations;
 import model.HeaderTableHandler;
 import model.InvoiceHeader;
@@ -96,7 +92,7 @@ public class ActionHandler implements ActionListener {
          }
          HeaderTableHandler handler=new HeaderTableHandler(headers);
          form.getjTable1().setModel(handler);
-         
+         form.setHeaders(headers);
     }
 
     private void SaveFile() {

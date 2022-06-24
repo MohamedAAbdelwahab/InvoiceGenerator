@@ -2,12 +2,11 @@
 package view;
 
 import controller.ActionHandler;
-import java.io.FileNotFoundException;
+import controller.tableSelectionHandler;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.JTable;
-import model.FileOperations;
+import javax.swing.JTextField;
 import model.InvoiceHeader;
 
 /**
@@ -66,6 +65,7 @@ public class MainForm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.getSelectionModel().addListSelectionListener(LinesHandler);
         jScrollPane1.setViewportView(jTable1);
 
         jLabel1.setText("Invoice Number");
@@ -237,7 +237,17 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
     }
+ArrayList<InvoiceHeader> headers=new ArrayList();    
 ActionHandler handler=new ActionHandler(this);
+tableSelectionHandler LinesHandler=new tableSelectionHandler(this);
+
+    public ArrayList<InvoiceHeader> getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(ArrayList<InvoiceHeader> headers) {
+        this.headers = headers;
+    }
 
     public JTable getjTable1() {
         return jTable1;
@@ -255,6 +265,38 @@ ActionHandler handler=new ActionHandler(this);
         this.jTable2 = jTable2;
     }
 
+    public JLabel getjLabel6() {
+        return jLabel6;
+    }
+
+    public void setjLabel6(JLabel jLabel6) {
+        this.jLabel6 = jLabel6;
+    }
+
+    public JLabel getjLabel5() {
+        return jLabel5;
+    }
+
+    public void setjLabel5(JLabel jLabel5) {
+        this.jLabel5 = jLabel5;
+    }
+
+    public JTextField getjTextField1() {
+        return jTextField1;
+    }
+
+    public void setjTextField1(JTextField jTextField1) {
+        this.jTextField1 = jTextField1;
+    }
+
+    public JTextField getjTextField2() {
+        return jTextField2;
+    }
+
+    public void setjTextField2(JTextField jTextField2) {
+        this.jTextField2 = jTextField2;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelBtn;
     private javax.swing.JButton createInvoice;
