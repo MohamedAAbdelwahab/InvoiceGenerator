@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import model.FileOperations;
+import model.HeaderTableHandler;
 import model.InvoiceHeader;
 import model.InvoiceLine;
 import view.MainForm;
@@ -93,6 +94,9 @@ public class ActionHandler implements ActionListener {
                   }
               }
          }
+         HeaderTableHandler handler=new HeaderTableHandler(headers);
+         form.getjTable1().setModel(handler);
+         
     }
 
     private void SaveFile() {
