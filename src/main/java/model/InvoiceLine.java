@@ -1,15 +1,16 @@
 package model;
 
 public class InvoiceLine {
+    int invoiceNumber;
     String itemName;
     String itemPrice;
     int count;    
     InvoiceHeader header;
-    public InvoiceLine(String itemName, String itemPrice, int count,InvoiceHeader header) {
+    public InvoiceLine(int invoiceNumber,String itemName, String itemPrice, int count) {
+        this.invoiceNumber=invoiceNumber;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.count = count;
-        this.header=header;
     }
     public double getTotalPrice()
     {
@@ -45,6 +46,14 @@ public class InvoiceLine {
 
     public void setHeader(InvoiceHeader header) {
         this.header = header;
+    }
+
+    public int getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public void setInvoiceNumber(int invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
     }
     
 }

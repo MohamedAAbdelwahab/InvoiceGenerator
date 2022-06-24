@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 public class InvoiceHeader {
 
-    String invoiceNum;
+    int invoiceNum;
     String invoiceDate;
     String customerName;
     ArrayList<InvoiceLine> invoiceLines = new ArrayList<>();
 
-    public String getInvoiceNum() {
+    public int getInvoiceNum() {
         return invoiceNum;
     }
 
-    public void setInvoiceNum(String invoiceNum) {
+    public void setInvoiceNum(int invoiceNum) {
         this.invoiceNum = invoiceNum;
     }
 
@@ -37,8 +37,8 @@ public class InvoiceHeader {
         return invoiceLines;
     }
 
-    public void setInvoiceLines(ArrayList<InvoiceLine> invoiceLines) {
-        this.invoiceLines = invoiceLines;
+    public void setInvoiceLines(InvoiceLine invoiceLines) {
+        this.invoiceLines.add(invoiceLines);
     }
     public double getTotalOfInvoice()
     {
