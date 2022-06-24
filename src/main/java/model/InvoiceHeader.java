@@ -40,5 +40,13 @@ public class InvoiceHeader {
     public void setInvoiceLines(ArrayList<InvoiceLine> invoiceLines) {
         this.invoiceLines = invoiceLines;
     }
-
+    public double getTotalOfInvoice()
+    {
+        double total=0.0;
+        for(InvoiceLine line:invoiceLines)
+        {
+            total+=line.getTotalPrice();
+        }
+        return total;
+    }
 }

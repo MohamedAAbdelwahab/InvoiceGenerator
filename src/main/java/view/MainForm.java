@@ -4,6 +4,13 @@
  */
 package view;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.FileOperations;
+import model.InvoiceHeader;
+
 /**
  *
  * @author moham
@@ -220,6 +227,20 @@ public class MainForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                  FileOperations fileOperations=new FileOperations();
+        ArrayList<InvoiceHeader> headers;
+                try {
+                    headers=fileOperations.readFile();
+                     for(InvoiceHeader header:headers)
+        {
+            System.out.println(header.getInvoiceNum());
+            System.out.println(header.getInvoiceDate());
+            System.out.println(header.getCustomerName());
+        }
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
+       
                 new MainForm().setVisible(true);
             }
         });
