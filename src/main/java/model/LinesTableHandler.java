@@ -3,6 +3,7 @@ package model;
 
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
+import view.MainForm;
 
 /**
  *
@@ -10,9 +11,11 @@ import javax.swing.table.AbstractTableModel;
  */
 public class LinesTableHandler extends AbstractTableModel {
     ArrayList<InvoiceLine> Lines=new ArrayList();
-
-    public LinesTableHandler(ArrayList<InvoiceLine> Lines) {
+    ArrayList<InvoiceLine> OldLines=new ArrayList();
+    MainForm form;
+    public LinesTableHandler(MainForm form,ArrayList<InvoiceLine> Lines) {
         this.Lines=Lines;
+        this.form=form;
     }
     
     @Override
@@ -53,18 +56,41 @@ public class LinesTableHandler extends AbstractTableModel {
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex)
      {
-        InvoiceLine invoice=Lines.get(rowIndex);
+        ArrayList<InvoiceLine> OldLines=new ArrayList();
+            for(InvoiceLine line:Lines)
+            {
+               if (!line.equals(Lines.get(rowIndex)))
+                OldLines.add(line);
+            }
+            InvoiceLine newLine=new InvoiceLine();
          if(0 == columnIndex) {
-            invoice.setItemName(String.valueOf(aValue));
+           newLine.setCount(Lines.get(rowIndex).getCount());
+           newLine.setInvoiceNumber(Lines.get(rowIndex).getInvoiceNumber());
+           newLine.setItemPrice(Lines.get(rowIndex).getItemPrice());
+           newLine.setItemName(String.valueOf(aValue));
         }
         else if(1 == columnIndex) {
-        invoice.setItemPrice(String.valueOf(aValue));
-            
+           newLine.setItemPrice(String.valueOf(aValue));
+            newLine.setCount(Lines.get(rowIndex).getCount());
+           newLine.setInvoiceNumber(Lines.get(rowIndex).getInvoiceNumber());
+           newLine.setItemName(Lines.get(rowIndex).getItemName());
             }
         else if(2 == columnIndex) {
-        invoice.setCount(Integer.valueOf((String)aValue));
+          newLine.setItemName(Lines.get(rowIndex).getItemName());
+          newLine.setCount(Integer.valueOf((String)aValue));
+           newLine.setInvoiceNumber(Lines.get(rowIndex).getInvoiceNumber());
+           newLine.setItemPrice(Lines.get(rowIndex).getItemPrice());
+
             }
-         getValueAt(rowIndex, 3);
+         OldLines.add(newLine);
+         Lines=OldLines;
+         this.fireTableDataChanged();
+         InvoiceHeader temp=new InvoiceHeader();
+         temp.setInvoiceNum(form.getHeaders().get(form.getjTable1().getSelectedRow()).getInvoiceNum());
+         temp.setCustomerName(form.getHeaders().get(form.getjTable1().getSelectedRow()).getCustomerName());
+         temp.setInvoiceDate(form.getHeaders().get(form.getjTable1().getSelectedRow()).getInvoiceDate());
+         temp.setNewInvoiceLines(OldLines);
+         form.setHeader(temp);
         }
     @Override
     public String getColumnName(int column) {

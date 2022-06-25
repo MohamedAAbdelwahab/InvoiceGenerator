@@ -40,6 +40,10 @@ public class InvoiceHeader {
     public void setInvoiceLines(InvoiceLine invoiceLines) {
         this.invoiceLines.add(invoiceLines);
     }
+    public void setNewInvoiceLines(ArrayList<InvoiceLine> invoiceLines)
+    {
+        this.invoiceLines=invoiceLines;
+    }
     public double getTotalOfInvoice()
     {
         double total=0.0;
@@ -48,5 +52,9 @@ public class InvoiceHeader {
             total+=line.getTotalPrice();
         }
         return total;
+    }
+    @Override
+    public String toString() {
+        return invoiceNum + "," + invoiceDate + "," + customerName;
     }
 }

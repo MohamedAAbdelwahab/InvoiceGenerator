@@ -3,11 +3,18 @@ package view;
 
 import controller.ActionHandler;
 import controller.tableSelectionHandler;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import model.FileOperations;
+import model.HeaderTableHandler;
 import model.InvoiceHeader;
+import model.InvoiceLine;
 
 /**
  *
@@ -15,11 +22,31 @@ import model.InvoiceHeader;
  */
 public class MainForm extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MainForm
-     */
-    public MainForm() {
+    public MainForm() throws FileNotFoundException {
         initComponents();
+        HeaderTableHandler Tablehandler;
+        FileOperations fileOP=new FileOperations();
+        File HeaderfilePath=new File(".\\InvoiceHeader.csv");
+        headers=fileOP.readHeaderFile(HeaderfilePath);
+        ArrayList<InvoiceLine> Lines=new ArrayList();
+        File LinesfilePath=new File(".\\InvoiceLine.csv");
+        Lines=fileOP.readLinesFile(LinesfilePath);
+
+        for(InvoiceLine line:Lines)
+         {
+              for(InvoiceHeader header:headers)
+              {
+                  if(header.getInvoiceNum()==line.getInvoiceNumber())
+                  {  
+                      line.setHeader(header);
+                      header.setInvoiceLines(line);
+                  }
+              }
+         }
+        
+         Tablehandler=new HeaderTableHandler(headers);
+         this.getjTable1().setModel(Tablehandler);
+         this.setHeaders(headers);
     }
 
     /**
@@ -97,6 +124,11 @@ public class MainForm extends javax.swing.JFrame {
 
         saveBtn.setText("save");
         saveBtn.addActionListener(handler);
+        saveBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveBtnActionPerformed(evt);
+            }
+        });
 
         cancelBtn.setText("cancel");
         cancelBtn.addActionListener(handler);
@@ -198,6 +230,10 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_loadFileActionPerformed
 
+    private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_saveBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -228,14 +264,27 @@ public class MainForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                  
-                new MainForm().setVisible(true);
+                try {
+                    new MainForm().setVisible(true);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 ArrayList<InvoiceHeader> headers=new ArrayList();    
 ActionHandler handler=new ActionHandler(this);
 tableSelectionHandler LinesHandler=new tableSelectionHandler(this);
+InvoiceHeader header=new InvoiceHeader();
+    FileOperations file=new FileOperations();
+
+    public InvoiceHeader getHeader() {
+        return header;
+    }
+
+    public void setHeader(InvoiceHeader header) {
+        this.header = header;
+    }
 
     public ActionHandler getHandler() {
         return handler;

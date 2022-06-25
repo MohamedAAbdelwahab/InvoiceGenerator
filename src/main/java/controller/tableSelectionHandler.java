@@ -37,7 +37,7 @@ public class tableSelectionHandler implements ListSelectionListener{
        int selectedIndex=form.getjTable1().getSelectedRow();
        InvoiceHeader header=form.getHeaders().get(selectedIndex);
        ArrayList<InvoiceLine>Lines =header.getInvoiceLines();
-        LinesTableHandler handler=new LinesTableHandler(Lines);
+        LinesTableHandler handler=new LinesTableHandler(form,Lines);
         form.getjTable2().setModel(handler);
         form.getjLabel6().setText(String.valueOf(header.getInvoiceNum()));
         form.getjLabel5().setText(String.valueOf(header.getTotalOfInvoice()));

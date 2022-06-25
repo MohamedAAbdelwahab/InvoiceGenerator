@@ -6,6 +6,9 @@ public class InvoiceLine {
     String itemPrice;
     int count;    
     InvoiceHeader header;
+    public InvoiceLine()
+    {
+    }
     public InvoiceLine(int invoiceNumber,String itemName, String itemPrice, int count) {
         this.invoiceNumber=invoiceNumber;
         this.itemName = itemName;
@@ -55,5 +58,8 @@ public class InvoiceLine {
     public void setInvoiceNumber(int invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
     }
-    
+      @Override
+    public String toString() {
+        return header.getInvoiceNum()+ "," + itemName + "," + itemPrice + "," + count;
+    }
 }
