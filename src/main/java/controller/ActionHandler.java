@@ -35,7 +35,7 @@ public class ActionHandler implements ActionListener {
     AddInvoiceHeader AddingInvoicehandler;
     AddInvoiceLine AddingInvoiceLineHandler;
     InvoiceHeader recentlyAddedHeader;
-    HeaderTableHandler Tablehandler;
+    public static HeaderTableHandler Tablehandler;
     public ActionHandler(MainForm form) {
         this.form=form;
     }

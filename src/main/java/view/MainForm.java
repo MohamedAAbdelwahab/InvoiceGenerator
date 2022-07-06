@@ -24,11 +24,11 @@ public class MainForm extends javax.swing.JFrame {
 
     public MainForm() throws FileNotFoundException {
         initComponents();
-        HeaderTableHandler Tablehandler;
+
         FileOperations fileOP=new FileOperations();
         File HeaderfilePath=new File(".\\InvoiceHeader.csv");
         headers=fileOP.readHeaderFile(HeaderfilePath);
-        ArrayList<InvoiceLine> Lines=new ArrayList();
+        ArrayList<InvoiceLine> Lines;
         File LinesfilePath=new File(".\\InvoiceLine.csv");
         Lines=fileOP.readLinesFile(LinesfilePath);
 
@@ -43,9 +43,9 @@ public class MainForm extends javax.swing.JFrame {
                   }
               }
          }
-        
-         Tablehandler=new HeaderTableHandler(headers);
-         this.getjTable1().setModel(Tablehandler);
+
+        ActionHandler.Tablehandler=new HeaderTableHandler(headers);
+         this.getjTable1().setModel(ActionHandler.Tablehandler);
          this.setHeaders(headers);
     }
 
