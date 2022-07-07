@@ -15,6 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+
+import com.sun.tools.javac.Main;
 import model.FileOperations;
 import model.HeaderTableHandler;
 import model.InvoiceHeader;
@@ -62,11 +64,11 @@ public class ActionHandler implements ActionListener {
         {
             DeleteInvoice();
         }
-        else if(e.getActionCommand().equals("save"))
+        else if(e.getActionCommand().equals("Create New Line"))
         {
             Save();
         }
-        else if(e.getActionCommand().equals("cancel"))
+        else if(e.getActionCommand().equals("Delete Line"))
         {
             Cancel();
         }
@@ -155,28 +157,72 @@ public class ActionHandler implements ActionListener {
     }
 
     private void Save() {
-        form.getjTable1().getSelectedRow();
-        if(form.getjTable1().getSelectedRow()==-1)
-        {
-        return;
-        }
-        headers.set(form.getjTable1().getSelectedRow(),form.getHeader());
-         LinesTableHandler handler=new LinesTableHandler(form,form.getHeader().getInvoiceLines());
-        form.getjTable2().setModel(handler);
-        Tablehandler.fireTableDataChanged();
-        form.getjLabel6().setText(String.valueOf(form.getHeader().getInvoiceNum()));
-        form.getjLabel5().setText(String.valueOf(form.getHeader().getTotalOfInvoice()));
-        form.getjTextField1().setText(form.getHeader().getInvoiceDate());
-        form.getjTextField2().setText(form.getHeader().getCustomerName());
-        form.setHeaders(headers);
+        AddingInvoiceLineHandler=new AddInvoiceLine(form);
+        AddingInvoiceLineHandler.setVisible(true);
+//
+//        form.getjTable1().getSelectedRow();
+//        if(form.getjTable1().getSelectedRow()==-1)
+//        {
+//        return;
+//        }
+//        if (headers==null)
+//        {
+//            headers=MainForm.headers;
+//        }
+//        else {
+//            headers.set(form.getjTable1().getSelectedRow(),form.getHeader());
+//        }
+//         LinesTableHandler handler=new LinesTableHandler(form,form.getHeader().getInvoiceLines());
+//        form.getjTable2().setModel(handler);
+//        Tablehandler.fireTableDataChanged();
+//        form.getjLabel6().setText(String.valueOf(form.getHeader().getInvoiceNum()));
+//        form.getjLabel5().setText(String.valueOf(form.getHeader().getTotalOfInvoice()));
+//        form.getjTextField1().setText(form.getHeader().getInvoiceDate());
+//        form.getjTextField2().setText(form.getHeader().getCustomerName());
+//        form.setHeaders(headers);
     }
 
     private void Cancel() {
-         Tablehandler=new HeaderTableHandler(headers);
-         form.getjTable1().setModel(Tablehandler);
-         form.setHeaders(headers);
-        LinesTableHandler handler=new LinesTableHandler(form,new ArrayList<InvoiceLine>());
-        form.getjTable2().setModel(handler);
+        int InvoiceLineIndex = form.getjTable2().getSelectedRow();
+        int InvoiceHeaderIndex = form.getjTable1().getSelectedRow();
+        if(InvoiceHeaderIndex==-1)
+        {
+            JOptionPane.showMessageDialog(form, "Please Select invoice header first ","Error",JOptionPane.ERROR_MESSAGE);
+                return;
+        }
+        if(InvoiceLineIndex==-1)
+        {
+            JOptionPane.showMessageDialog(form, "Please Select invoice Line first ","Error",JOptionPane.ERROR_MESSAGE);
+            return;
+
+        }
+        if (InvoiceLineIndex != -1) {
+
+            if(headers==null)
+            {
+                form.getHeaders().get(InvoiceHeaderIndex).getInvoiceLines().remove(InvoiceLineIndex);
+                Tablehandler.fireTableDataChanged();
+                LinesTableHandler handler=new LinesTableHandler(form,form.getHeaders().get(InvoiceHeaderIndex).getInvoiceLines());
+                form.getjTable2().setModel(handler);
+                handler.fireTableDataChanged();
+                form.getjLabel5().setText(String.valueOf(form.getHeaders().get(InvoiceHeaderIndex).getTotalOfInvoice()));
+            }
+            else
+            {
+                headers.get(InvoiceHeaderIndex).getInvoiceLines().remove(InvoiceLineIndex);
+                Tablehandler.fireTableDataChanged();
+
+                LinesTableHandler handler=new LinesTableHandler(form,headers.get(InvoiceHeaderIndex).getInvoiceLines());
+                form.getjTable2().setModel(handler);
+                handler.fireTableDataChanged();
+                form.getjLabel5().setText(String.valueOf(headers.get(InvoiceHeaderIndex).getTotalOfInvoice()));
+            }
+        }
+//         Tablehandler=new HeaderTableHandler(headers);
+//         form.getjTable1().setModel(Tablehandler);
+//         form.setHeaders(headers);
+//        LinesTableHandler handler=new LinesTableHandler(form,new ArrayList<InvoiceLine>());
+//        form.getjTable2().setModel(handler);
     }
 
     private void InvoiceHeaderDialogConfirm() {
@@ -211,21 +257,74 @@ public class ActionHandler implements ActionListener {
         String ItemName=AddingInvoiceLineHandler.getItemNameTextField().getText();
         String ItemCount=AddingInvoiceLineHandler.getItemCountTextField().getText();
         String ItemPrice=AddingInvoiceLineHandler.getItemPriceTextField().getText();
-        try{
-           int itemcount= Integer.parseInt(ItemCount);
-            InvoiceLine Line=new InvoiceLine(recentlyAddedHeader.getInvoiceNum(),ItemName,ItemPrice,itemcount);
-            Line.setHeader(recentlyAddedHeader);
-            recentlyAddedHeader.setInvoiceLines(Line);
-            Tablehandler.fireTableDataChanged();
-            
+        if (recentlyAddedHeader==null) {
+            if (headers != null) {
+
+
+                try{
+                    int itemcount= Integer.parseInt(ItemCount);
+                    InvoiceLine Line=new InvoiceLine(headers.get(form.getjTable1().getSelectedRow()).getInvoiceNum(),ItemName,ItemPrice,itemcount);
+                    Line.setHeader(headers.get(form.getjTable1().getSelectedRow()));
+                    InvoiceHeader header= headers.get(form.getjTable1().getSelectedRow());
+                    headers.get(form.getjTable1().getSelectedRow()).setInvoiceLines(Line);
+                    Tablehandler.fireTableDataChanged();
+                    LinesTableHandler handler=new LinesTableHandler(form,header.getInvoiceLines());
+                    form.getjTable2().setModel(handler);
+                    handler.fireTableDataChanged();
+                    form.getjLabel5().setText(String.valueOf(header.getTotalOfInvoice()));
+
+                }
+                catch(NumberFormatException e)
+                {
+                    JOptionPane.showMessageDialog(form, e.getMessage(),"Invalid Number format",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+         else
+            {
+
+                try{
+                    int itemcount= Integer.parseInt(ItemCount);
+                    InvoiceLine Line=new InvoiceLine(form.getHeaders().get(form.getjTable1().getSelectedRow()).getInvoiceNum(),ItemName,ItemPrice,itemcount);
+                    Line.setHeader(form.getHeaders().get(form.getjTable1().getSelectedRow()));
+
+                   InvoiceHeader header= form.getHeaders().get(form.getjTable1().getSelectedRow());
+                    form.getHeaders().get(form.getjTable1().getSelectedRow()).setInvoiceLines(Line);
+                    Tablehandler.fireTableDataChanged();
+                    LinesTableHandler handler=new LinesTableHandler(form,header.getInvoiceLines());
+                    form.getjTable2().setModel(handler);
+                    handler.fireTableDataChanged();
+                    form.getjLabel5().setText(String.valueOf(header.getTotalOfInvoice()));
+
+                }
+                catch(NumberFormatException e)
+                {
+                    JOptionPane.showMessageDialog(form, e.getMessage(),"Invalid Number format",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
         }
-        catch(NumberFormatException e)
-        {
-            JOptionPane.showMessageDialog(form, e.getMessage(),"Invalid Number format",JOptionPane.ERROR_MESSAGE);
+        else {
+            try{
+                int itemcount= Integer.parseInt(ItemCount);
+                InvoiceLine Line=new InvoiceLine(recentlyAddedHeader.getInvoiceNum(),ItemName,ItemPrice,itemcount);
+                Line.setHeader(recentlyAddedHeader);
+                recentlyAddedHeader.setInvoiceLines(Line);
+                Tablehandler.fireTableDataChanged();
+                LinesTableHandler handler=new LinesTableHandler(form,recentlyAddedHeader.getInvoiceLines());
+                form.getjTable2().setModel(handler);
+                handler.fireTableDataChanged();
+                form.getjLabel5().setText(String.valueOf(recentlyAddedHeader.getTotalOfInvoice()));
+
+            }
+            catch(NumberFormatException e)
+            {
+                JOptionPane.showMessageDialog(form, e.getMessage(),"Invalid Number format",JOptionPane.ERROR_MESSAGE);
+            }
         }
-       Tablehandler.fireTableDataChanged();
-       AddingInvoiceLineHandler.setVisible(false);
-       AddingInvoiceLineHandler=null;
+        Tablehandler.fireTableDataChanged();
+        AddingInvoiceLineHandler.setVisible(false);
+        AddingInvoiceLineHandler=null;
     }
 
     private void InvoiceLineDialogCancel() {

@@ -122,7 +122,7 @@ public class MainForm extends javax.swing.JFrame {
         deleteInvoice.setText("Delete invoice");
         deleteInvoice.addActionListener(handler);
 
-        saveBtn.setText("save");
+        saveBtn.setText("Create New Line");
         saveBtn.addActionListener(handler);
         saveBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -130,7 +130,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        cancelBtn.setText("cancel");
+        cancelBtn.setText("Delete Line");
         cancelBtn.addActionListener(handler);
 
         jMenu1.setText("File");
@@ -272,7 +272,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
     }
-ArrayList<InvoiceHeader> headers=new ArrayList();    
+public static ArrayList<InvoiceHeader> headers=new ArrayList();
 ActionHandler handler=new ActionHandler(this);
 tableSelectionHandler LinesHandler=new tableSelectionHandler(this);
 InvoiceHeader header=new InvoiceHeader();
